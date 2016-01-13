@@ -1,0 +1,231 @@
+html, body, body div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, figure, footer, header, menu, nav, section, time, mark, audio, video, details, summary {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font-weight: normal;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+article, aside, figure, footer, header, nav, section, details, summary {display: block;}
+
+
+
+body {
+	background: #171717;
+	font: 16px 'Raleway', Helvetica, Verdana, Arial;
+	color: 	#f4f4f0;
+	#efefef
+	
+}
+
+#wrapper {
+	margin: 0 auto;
+	width: 810px;
+	text-align: center;
+	overflow: hidden;
+}
+
+/* Title Area */
+
+header {
+	width: 800px;
+	
+}
+
+h1 {
+	color: #CDDBDE;
+	margin-top: 15px;
+	font-size: 90px;
+	font-family: 'Exo 2', sans-serif;
+	letter-spacing: -2px;
+	text-shadow: -3px 2px 0 #6f6f6f;
+}
+
+
+/* Bot Area */
+
+.botbox {
+	margin: 20px 0px;
+	width: 806px;
+	height: 20px;
+	background: #6f6f6f;
+	font: 14px 'Lucida Console', Monaco, monospace;
+	text-align: left;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #ccd9d8;
+}
+
+.bottext {
+	margin-top: 3.5px;
+	letter-spacing: -.5px;
+	color: #F2F2F2;
+
+}
+
+.botoutput {
+	position: relative;
+}
+
+
+/* Scoreboard Area */
+
+#sideBoard {
+	width: 280px;
+	float: left;
+	color: #262626;
+	border: 10px solid #663300;
+	border-right: none;
+}
+
+h2 {
+	font-size: 30px;
+	padding-top: 10px;
+}
+
+.scoreCard {
+	width: 280px;
+	height: 160px;
+	overflow: hidden;
+}
+
+#xScoreCard {
+	width: 140px;
+	background: #0A7B83;
+	margin: 0;
+	float: left;
+}
+
+#oScoreCard {
+	width: 140px;
+	background: #2AA876;
+	float: left;
+}
+
+#xScore, #oScore {
+	font-size: 100px;
+	position: relative;
+	bottom: 15px;
+}
+
+#newGame {
+	width: 280px;
+	height: 80px;
+	background: #FFD265;
+}
+
+#newGame h2 {
+	padding-top: 20px;
+	font-size: 35px;
+}
+
+#resetScore {
+	width: 280px;
+	height: 80px;
+	background: #F19C65;
+}
+
+#resetScore h2 {
+	padding-top: 20px;
+	font-size: 35px;
+}
+
+#newGame:hover {
+	background: #EEB75D;
+	cursor: pointer;
+	color: #F2F2F2;
+}
+
+#resetScore:hover {
+	background: #E0915E;
+	cursor: pointer;
+	color: #F2F2F2;
+}
+
+#botSettings {
+	width: 280px;
+	height: 198px;
+	background: #CE533D;
+}
+
+#botSettings h2 {
+	font-size: 30px;
+}
+
+h3 {
+	font-size: 20px;
+	padding: 5px 0px;
+}
+
+#opponent {
+	padding-top: 5px;
+}
+#difficulty {
+	padding-top: 5px;
+}
+
+/* Game Board */
+
+#gameBoard {
+	width: 500px;
+	background: #171717;
+	display: inline-block;
+	border: 10px solid #663300;
+}
+
+.row {
+	width: 100%;
+	height: 166px;
+}
+
+#midRow {
+	border-top: 10px solid;
+	border-bottom: 10px solid;
+}
+
+.leftCol, .midCol, .rightCol {
+	height: 166px;
+	width: 32%;
+	float: left;
+}
+
+.midCol {
+	border-left: 10px solid;
+	border-right: 10px solid;
+}
+
+.x {
+	font-size: 150px;
+	opacity: 0;
+	position: relative;
+	left: 1%;
+}
+
+.x:hover {
+	cursor: pointer;
+	opacity: .5 !important;
+}
+
+.o {
+	visibility: hidden;
+	font-size: 150px;
+	opacity: 0;
+	position: relative;
+	bottom: 175px;
+}
+
+.o:hover {
+	cursor: pointer;
+	opacity: .5 !important;
+}
+
+/* Footer */
+
+footer {
+	color: #6f6f6f;
+	margin: 15px 0px;
+}
+
+
