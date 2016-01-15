@@ -52,22 +52,32 @@
 				<div id="botSettings">
 					<h2>Settings</h2>
 					
-					<div id="opponent">
-					<h3>Opponent</h3>
-					<form action="">
-					  <input type="radio" name="player" value="human" checked> Human
-					  <input type="radio" name="player" value="bot"> Bot
-					</form>
+					<div id="players">
+						<div class="playerBox">
+							<h3>Team X</h3>
+								<select id ="xSelect">
+									<option value="humanX" id="humanX">Human</option>
+									<option value="botX" id="botX">Bot</option>
+								</select>
+						</div>
+					
+						<div class="playerBox">
+							<h3>Team O</h3>
+								<select id="oSelect">
+									<option value="humanO" id="humanO">Human</option>
+									<option value="botO" id="botO">Bot</option>
+								</select>
+						</div>
 					</div>
 					
 					<div id="difficulty">
-					<h3>Difficulty</h3>
-					<form action="">
-					  <input type="radio" name="difficulty" value="easy" checked> Easy
-					  <input type="radio" name="difficulty" value=""> Moderate<br>
-					  <input type="radio" name="difficulty" value="advanced"> Advanced
-					  <input type="radio" name="difficulty" value="expert"> Expert					  
-					</form>
+						<h3>Difficulty</h3>
+						<form action="">
+							<input type="radio" name="difficulty" id="easy" checked> Easy
+							<input type="radio" name="difficulty" id="moderate"> Moderate<br>
+							<input type="radio" name="difficulty" id="advanced"> Advanced
+							<input type="radio" name="difficulty" id="expert"> Expert					  
+						</form>
 					</div>
 					
 				</div>

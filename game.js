@@ -22,16 +22,86 @@ var xScoreView = document.getElementById("xScore");
 var oScoreView = document.getElementById("oScore");
 
 
-//Setups Tic-Tac-Toe Game
-setupGame();
+var humanX = document.getElementById("humanX");
+var botX = document.getElementById("botX");
+var humanO = document.getElementById("humanO");
+var botO = document.getElementById("botO");
 
+var easy = document.getElementById("easy");
+var moderate = document.getElementById("moderate");
+var advanced = document.getElementById("advanced");
+var expert = document.getElementById("expert");
+
+
+//Setup Tic-Tac-Toe Game
+setupGame();
 
 //Implements onClicks for gameboard, new game, and reset scores
 function setupGame() {
 	setOnClick();
 	newGameButton.onclick = resetGame;
 	resetScoresButton.onclick = resetScores;
+	
+	xSelect.onchange = switchModeUpdate;
+	oSelect.onchange = switchModeUpdate;
+		
+	easy.onclick = easyDifficulty;
+	moderate.onclick = moderateDifficulty;
+	advanced.onclick = advancedDifficulty;
+    expert.onclick = expertDifficulty;	
 }
+
+function humanGame() {
+	if (humanX.selected == true && humanO.selected == true) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+function humanBotGame() {
+	if ((botX.selected == true && humanO.selected == true) || (botO.selected == true && humanX.selected == true)) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+function botGame() {
+	if (botX.selected == true && botO.selected == true) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+function easyDifficulty() {
+	
+	switchDifficultyUpdate();
+
+}
+
+function moderateDifficulty() {
+	
+	switchDifficultyUpdate();
+
+}
+
+function advancedDifficulty() {
+	
+	switchDifficultyUpdate();
+	
+}
+
+function expertDifficulty() {
+	
+	switchDifficultyUpdate();
+
+}
+
 
 function setOnClick() {
 	
@@ -127,8 +197,8 @@ function spaceUpdate(space) {
 
 function resetGame() {
 	
-	humanNewGameUpdate();
-	
+	newGameUpdate();
+
 	if(allX.length > 0) {
 		for(var i=0; i<allX.length; i++) {
 			allX[i].style.opacity = 0;
@@ -184,7 +254,7 @@ function checkVictory() {
 	}
 	
 	else if (turn == 9) {
-		humanTieUpdate();
+		tieUpdate();
 		return;
 	}
 	
@@ -202,20 +272,20 @@ function checkOpacity(array, i1, i2, i3) {
 function xWins() {
 	xScore++;
 	xScoreView.textContent = xScore;
-	humanWinUpdate("X");
+	winUpdate("X");
 	disableOnClick();
 }
 
 function oWins() {
 	oScore++;
 	oScoreView.textContent = oScore;
-	humanWinUpdate("O")
+	winUpdate("O")
 	disableOnClick();
 }
 
 function resetScores() {
 	
-	humanResetScores();
+	resetScoreUpdate();
 	
 	xScore = oScore = 0;
 	xScoreView.textContent = 0;
@@ -237,72 +307,119 @@ function ranNumGen(size) {
 	return ranNumber;
 }
 
-function humanWinUpdate(winner) {
+function winUpdate(winner) {
 	
 	var combinedScore = xScore + oScore;
 	
-	var bestOf = "What do you say Team " + winner + "? Best " + (combinedScore + 1) + " out of " + (combinedScore * 2 + 1) + "?";
+	if (humanGame() == true) {
+		var bestOf = "What do you say Team " + winner + "? Best " + (combinedScore + 1) + " out of " + (combinedScore * 2 + 1) + "?";
 	
-	if (winner == "X") {
-		var xUpdateText = ["Congrats Team X! Aren't you glad you aren't Team O?", "Wow Team O... That was bad. Hit the books.",
-		"Team X Wins! Better luck next time Team O.", bestOf, "Jeez Team O. Have you considered just not playing this game at all?",
-		"Come on Team O! I had twenty bucks on you!", "I've seen frying pans who are better than you Team O."];
+		if (winner == "X") {
+			var xUpdateText = ["Congrats Team X! Aren't you glad you aren't Team O?", "Wow Team O... That was bad. Hit the books.",
+			"Team X Wins! Better luck next time Team O.", bestOf, "Jeez Team O. Have you considered just not playing this game at all?",
+			"Come on Team O! I had twenty bucks on you!", "I've seen frying pans who are better than you Team O."];
 	
-		var ranXText = xUpdateText[ranNumGen(xUpdateText.length)];
+			var ranXText = xUpdateText[ranNumGen(xUpdateText.length)];
 	
-		botText.innerHTML = ranXText;	
+			botText.innerHTML = ranXText;	
+		}
+		else {
+			var oUpdateText = ["Congrats Team O! Aren't you glad you aren't Team X?", "Wow Team X... That was bad. Hit the books.",
+			"Team O Wins! Better luck next time Team X.", bestOf, "Alright Team X. Have you considered just not playing this game at all?",
+			"Maybe Ice Skating is more your thing Team X.", "Be truthful Team X. Are you letting Team O win?"];
+	
+			var ranOText = oUpdateText[ranNumGen(oUpdateText.length)];
+	
+			botText.innerHTML = ranOText;	
+		}
+	}
+	
+
+}
+
+function tieUpdate() {
+	
+	if (humanGame() == true) {
+		var tieUpdateText = ["BOOOOOOOORRRRINNNG.", "Do I need to step in and show you two how to win?", 
+		"Ahhh a tie game... How interesting.", "WOW! What an action packed game! Not."]
+	
+		var ranTieText = tieUpdateText[ranNumGen(tieUpdateText.length)];
+	
+		botText.innerHTML = ranTieText;
+	}
+	
+}
+
+function newGameUpdate() {
+	
+	if (humanGame() == true) {
+		var newGameUpdateText = ["AHHH YEA! NEW GAME BABY!", "Sometimes I wonder if I have any choice in the matter...", 
+		"Hopefully this game is more exciting than the last one.", "I play winner next!"]
+	
+		var ranNewGameText = newGameUpdateText[ranNumGen(newGameUpdateText.length)];
+	
+		botText.innerHTML = ranNewGameText;
+	}
+
+	
+}
+
+function resetScoreUpdate() {
+	
+	if (humanGame() == true) {
+		var losingReset = "Just couldn't take losing could you";
+	
+		if (xScore < oScore) {
+			losingReset = losingReset + " Team X?"
+		}
+		else if (oScore < xScore) {
+			losingReset += " Team O?"
+		}
+		else {
+			losingReset = "There's not even any scores on the board!"
+		}
+	
+		var resetUpdateText = [losingReset, "Nothing like a fresh slate to start a losing steak on eh?"]
+	
+		var ranResetText = resetUpdateText[ranNumGen(resetUpdateText.length)];
+	
+		botText.innerHTML = ranResetText;
+	}
+}
+
+function switchModeUpdate() {
+	
+	resetGame();
+	resetScores();
+	
+	if (humanGame() == true) {
+		botText.innerHTML = "Oh I see how it is. Fine play without me. I didn't want to play anyways..."
+	}
+	else if ((humanX.selected == true || humanO.selected == true) && (botX.selected == true || botO.selected == true)){
+		botText.innerHTML = "FINALLY! I've been waiting for an opponent all day!"
 	}
 	else {
-		var oUpdateText = ["Congrats Team O! Aren't you glad you aren't Team X?", "Wow Team X... That was bad. Hit the books.",
-		"Team O Wins! Better luck next time Team X.", bestOf, "Alright Team X. Have you considered just not playing this game at all?",
-		"Maybe Ice Skating is more your thing Team X.", "Be truthful Team X. Are you letting Team O win?"];
-	
-		var ranOText = oUpdateText[ranNumGen(oUpdateText.length)];
-	
-		botText.innerHTML = ranOText;	
+		botText.innerHTML = "Oh great you want me to play against myself. Like I can't do that any other time..."
 	}
-
 }
 
-function humanTieUpdate() {
+function switchDifficultyUpdate() {
 	
-	var tieUpdateText = ["BOOOOOOOORRRRINNNG.", "Do I need to step in and show you two how to win?", 
-	"Ahhh a tie game... How interesting.", "WOW! What an action packed game! Not."]
-	
-	var ranTieText = tieUpdateText[ranNumGen(tieUpdateText.length)];
-	
-	botText.innerHTML = ranTieText;
-	
-}
-
-function humanNewGameUpdate() {
-	
-	var newGameUpdateText = ["AHHH YEA! NEW GAME BABY!", "Sometimes I wonder if I have any choice in the matter...", 
-	"Hopefully this game is more exciting than the last one.", "I play winner next!"]
-	
-	var ranNewGameText = newGameUpdateText[ranNumGen(newGameUpdateText.length)];
-	
-	botText.innerHTML = ranNewGameText;
-	
-}
-
-function humanResetScores() {
-	
-	var losingReset = "Just couldn't take losing could you";
-	
-	if (xScore < oScore) {
-		losingReset = losingReset + " Team X?"
+	if (humanBotGame() == true) {
+		
+		resetGame();
+		
+		if (easy.checked == true) {
+			botText.innerHTML = "Oh sure play me at my weakest. COWARD!"
+		}
+		else if (moderate.checked == true) {
+			botText.innerHTML = "I think you'll see I'm no slouch, but you might get lucky here and there. Might."
+		}
+		else if (advanced.checked == true) {
+			botText.innerHTML = "You better be good. Really good. I mean REALLY GOOD."
+		}
+		else {
+			botText.innerHTML = "You've entered into dangerous territory. Don't you see? I can't lose."
+		}
 	}
-	else if (oScore < xScore) {
-		losingReset += " Team O?"
-	}
-	else {
-		losingReset = "There's not even any scores on the board!"
-	}
-	
-	var resetUpdateText = [losingReset, "Nothing like a fresh slate to start a losing steak on eh?"]
-	
-	var ranResetText = resetUpdateText[ranNumGen(resetUpdateText.length)];
-	
-	botText.innerHTML = ranResetText;
 }
