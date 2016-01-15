@@ -45,12 +45,13 @@ function setupGame() {
 	xSelect.onchange = switchModeUpdate;
 	oSelect.onchange = switchModeUpdate;
 		
-	easy.onclick = easyDifficulty;
-	moderate.onclick = moderateDifficulty;
-	advanced.onclick = advancedDifficulty;
-    expert.onclick = expertDifficulty;	
+	easy.onclick = switchDifficultyUpdate;
+	moderate.onclick = switchDifficultyUpdate;
+	advanced.onclick = switchDifficultyUpdate;
+    expert.onclick = switchDifficultyUpdate;	
 }
 
+//Checks if game is between two humans
 function humanGame() {
 	if (humanX.selected == true && humanO.selected == true) {
 		return true;
@@ -60,6 +61,7 @@ function humanGame() {
 	}
 }
 
+//Checks if game is between human and bot
 function humanBotGame() {
 	if ((botX.selected == true && humanO.selected == true) || (botO.selected == true && humanX.selected == true)) {
 		return true;
@@ -69,6 +71,8 @@ function humanBotGame() {
 	}
 }
 
+
+//Checks if game is between two bots
 function botGame() {
 	if (botX.selected == true && botO.selected == true) {
 		return true;
@@ -78,31 +82,57 @@ function botGame() {
 	}
 }
 
+
 function easyDifficulty() {
 	
-	switchDifficultyUpdate();
+	if(botX.selected == true && humanO.selected == true) {
+			disableXOnClick();
+			if (turn % 2 != 0) {
+				
+				spotChoice = ranNumGen(allX.length)
+
+				while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
+					spotChoice = ranNumGen(allX.length) 
+				}
+				
+				setOnClick();
+				allX[spotChoice].click();
+			}
+	}
+	
+	else if(botO.selected == true && humanX.selected == true) {
+			disableOOnClick();
+			if (turn % 2 == 0) {
+				
+				spotChoice = ranNumGen(allO.length)
+				
+				while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
+					spotChoice = ranNumGen(allO.length) 
+				}
+				
+				setOnClick();
+				allO[spotChoice].click();
+			}
+	}
 
 }
 
 function moderateDifficulty() {
-	
-	switchDifficultyUpdate();
+
 
 }
 
 function advancedDifficulty() {
 	
-	switchDifficultyUpdate();
 	
 }
 
 function expertDifficulty() {
 	
-	switchDifficultyUpdate();
 
 }
 
-
+//Sets the onClick functions for all X and O to spaceUpdate
 function setOnClick() {
 	
 	for(var i=0; i<allX.length; i++) (function(i){
@@ -118,13 +148,24 @@ function setOnClick() {
 
 }
 
-function disableOnClick() {
+//Disables the onClick events for all X
+function disableXOnClick() {
 	
 	for(var i=0; i<allX.length; i++) (function(i){
 		
 		allX[i].onclick = false;
 		
+	})(i);
+	
+}
+
+//Disables the onClick events for all O
+function disableOOnClick() {
+	
+	for(var i=0; i<allO.length; i++) (function(i){
+		
 		allO[i].onclick = false;
+		
 	})(i);
 	
 }
@@ -184,14 +225,24 @@ function spaceUpdate(space) {
 		}		
 	}
 	
-	checkVictory();
+	if (checkVictory() == true) {
+		return;
+	}
 	
 	if (turn == 9) {
-		disableOnClick();
+		disableXOnClick();
+		disableOOnClick();
 		return;
 	}
 	
 	turn++;
+	
+	if(humanBotGame() == true) {
+		if (easy.checked) {
+			easyDifficulty();
+		}
+	}
+	
 		
 }
 
@@ -220,42 +271,51 @@ function resetGame() {
 	
 	turn = 1;
 	
+	if (botX.selected == true && humanO.selected == true) {
+		if (easy.checked == true) {
+			easyDifficulty();
+		}
+	}
+	
 }
 
 function checkVictory() {
 	if (checkOpacity(allX, 0, 1, 2) || checkOpacity(allX, 3, 4, 5) || checkOpacity(allX, 6, 7, 8)) {
 		xWins();
-		return;
+		return true;
 	}
 	
 	else if (checkOpacity(allO, 0, 1, 2) || checkOpacity(allO, 3, 4, 5) || checkOpacity(allO, 6, 7, 8)) {
 		oWins();
-		return;
+		return true;
 	}
 	
 	else if (checkOpacity(allX, 0, 3, 6) || checkOpacity(allX, 1, 4, 7) || checkOpacity(allX, 2, 5, 8)) {
 		xWins();
-		return;
+		return true;
 	}
 	
 	else if (checkOpacity(allO, 0, 3, 6) || checkOpacity(allO, 1, 4, 7) || checkOpacity(allO, 2, 5, 8)) {
 		oWins();
-		return;
+		return true;
 	}
 	
 	else if (checkOpacity(allX, 0, 4, 8) || checkOpacity(allX, 2, 4, 6)) {
 		xWins();
-		return;
+		return true;
 	}
 	
 	else if (checkOpacity(allO, 0, 4, 8) || checkOpacity(allO, 2, 4, 6)) {
 		oWins();
-		return;
+		return true;
 	}
 	
 	else if (turn == 9) {
 		tieUpdate();
-		return;
+		return false;
+	}
+	else {
+		return false;
 	}
 	
 	
@@ -273,14 +333,16 @@ function xWins() {
 	xScore++;
 	xScoreView.textContent = xScore;
 	winUpdate("X");
-	disableOnClick();
+	disableXOnClick();
+	disableOOnClick();
 }
 
 function oWins() {
 	oScore++;
 	oScoreView.textContent = oScore;
 	winUpdate("O")
-	disableOnClick();
+	disableXOnClick();
+	disableOOnClick();
 }
 
 function resetScores() {
@@ -360,6 +422,10 @@ function newGameUpdate() {
 	
 		botText.innerHTML = ranNewGameText;
 	}
+	
+	if (humanBotGame() == true) {
+		
+	}
 
 	
 }
@@ -397,6 +463,9 @@ function switchModeUpdate() {
 	}
 	else if ((humanX.selected == true || humanO.selected == true) && (botX.selected == true || botO.selected == true)){
 		botText.innerHTML = "FINALLY! I've been waiting for an opponent all day!"
+		if(botX.selected == true && humanO.selected == true) {
+			easyDifficulty();
+		}
 	}
 	else {
 		botText.innerHTML = "Oh great you want me to play against myself. Like I can't do that any other time..."
@@ -411,15 +480,27 @@ function switchDifficultyUpdate() {
 		
 		if (easy.checked == true) {
 			botText.innerHTML = "Oh sure play me at my weakest. COWARD!"
+			if(botX.selected == true) {
+				easyDifficulty();
+			}
 		}
 		else if (moderate.checked == true) {
 			botText.innerHTML = "I think you'll see I'm no slouch, but you might get lucky here and there. Might."
+			if(botX.selected == true) {
+				moderateDifficulty();
+			}
 		}
 		else if (advanced.checked == true) {
 			botText.innerHTML = "You better be good. Really good. I mean REALLY GOOD."
+			if(botX.selected == true) {
+				advancedDifficulty();
+			}
 		}
 		else {
 			botText.innerHTML = "You've entered into dangerous territory. Don't you see? I can't lose."
+			if(botX.selected == true) {
+				expertDifficulty();
+			}
 		}
 	}
 }
