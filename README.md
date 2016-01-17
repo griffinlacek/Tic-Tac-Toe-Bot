@@ -6,6 +6,6 @@ To-Do
 
 1. Implement Sassy Personality Module for Human vs Human. (DONE)
 2. Allow bot mode to be selected. (DONE)
-3. Implement Easy difficulty (primarily setting up the bot's ability to play).
-4. Complete Sassy Personality Module for Bot vs Human.
+3. Implement Easy difficulty (primarily setting up the bot's ability to play). (DONE)
+4. Complete Sassy Personality Module for Bot vs Human. (DONE)
 5. Add remaining difficulty modes.

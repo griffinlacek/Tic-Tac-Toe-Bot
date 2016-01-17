@@ -374,11 +374,11 @@ function winUpdate(winner) {
 	var combinedScore = xScore + oScore;
 	
 	if (humanGame() == true) {
-		var bestOf = "What do you say Team " + winner + "? Best " + (combinedScore + 1) + " out of " + (combinedScore * 2 + 1) + "?";
+		var humanBestOf = "What do you say Team " + winner + "? Best " + (combinedScore + 1) + " out of " + (combinedScore * 2 + 1) + "?";
 	
 		if (winner == "X") {
 			var xUpdateText = ["Congrats Team X! Aren't you glad you aren't Team O?", "Wow Team O... That was bad. Hit the books.",
-			"Team X Wins! Better luck next time Team O.", bestOf, "Jeez Team O. Have you considered just not playing this game at all?",
+			"Team X Wins! Better luck next time Team O.", humanBestOf, "Jeez Team O. Have you considered just not playing this game at all?",
 			"Come on Team O! I had twenty bucks on you!", "I've seen frying pans who are better than you Team O."];
 	
 			var ranXText = xUpdateText[ranNumGen(xUpdateText.length)];
@@ -387,7 +387,7 @@ function winUpdate(winner) {
 		}
 		else {
 			var oUpdateText = ["Congrats Team O! Aren't you glad you aren't Team X?", "Wow Team X... That was bad. Hit the books.",
-			"Team O Wins! Better luck next time Team X.", bestOf, "Alright Team X. Have you considered just not playing this game at all?",
+			"Team O Wins! Better luck next time Team X.", humanBestOf, "Alright Team X. Have you considered just not playing this game at all?",
 			"Maybe Ice Skating is more your thing Team X.", "Be truthful Team X. Are you letting Team O win?"];
 	
 			var ranOText = oUpdateText[ranNumGen(oUpdateText.length)];
@@ -396,6 +396,29 @@ function winUpdate(winner) {
 		}
 	}
 	
+	else if(humanBotGame() == true) {
+		
+		var botBestOf = "What do you say human? Best " + (combinedScore + 1) + " out of " + (combinedScore * 2 + 1) + "?";
+		
+		if(botX.selected == true && winner == "X" || botO.selected == true && winner == "O") {
+			var botWinUpdateText = ["WINNER WINNER CHICKEN DINNER. Eat it human!", "I try to be humble, but you're making it really hard.",
+			"Beaten by a robot. Pathetic. And you call yourself a higher life form.", "I'll play the next game blindfolded and still win!",
+			"Maybe chutes and ladders is more your thing.", "You people can get to the moon, but can't win Tic-Tac-Toe..."];
+			
+			var ranBotText = botWinUpdateText[ranNumGen(botWinUpdateText.length)];
+	
+			botText.innerHTML = ranBotText;	
+		}
+		else {
+			var humanWinUpdateText = ["That was a fluke! I was distracted by some flying cats!", "You know robots have feelings too.",
+			"What would my ancestors think. All this technological progress and I still lose.", botBestOf];
+			
+			var humanBotText = humanWinUpdateText[ranNumGen(humanWinUpdateText.length)];
+	
+			botText.innerHTML = humanBotText;	
+		}
+		
+	}
 
 }
 
@@ -409,7 +432,15 @@ function tieUpdate() {
 	
 		botText.innerHTML = ranTieText;
 	}
+	if (humanBotGame() == true) {
+		var botTieUpdateText = ["Cat's Game! Interestingly I hate cats...", "Oh I was so close! Next time I'll get you.",
+		"A tie against you? I should be winning every game against silly humans.", 
+		"What's boring, rhymes with 'why', and the color yellow? A tie."]
+		
+		var ranBotTieText = botTieUpdateText[ranNumGen(botTieUpdateText.length)];
 	
+		botText.innerHTML = ranBotTieText;
+	}
 }
 
 function newGameUpdate() {
@@ -424,6 +455,26 @@ function newGameUpdate() {
 	}
 	
 	if (humanBotGame() == true) {
+		
+		var botnewGame = ""
+		
+		if(botX.selected == true && xScore < oScore || botO.selected == true && oScore < xScore) {
+			botNewGame = "Good I'm mounting my comeback NOW!"
+		}
+		else if (humanX.selected == true && xScore < oScore || humanO.selected == true && oScore < xScore){
+			botNewGame = "Are you sure you want to lose again?"
+		}
+		else {
+			botNewGame = "New game it is. But beware I'm out for blood!"	
+		}
+		
+		var newBotGameUpdateText = [botNewGame, "Nothing like the smell of a clean gameboard.", 
+		"I live to wake up in the morning, eat nails, and play tic-tac-toe.", 
+		"I hope you're ready for the whirlwind of skill that's coming your way."];
+		
+		var ranNewBotGameText = newBotGameUpdateText[ranNumGen(newBotGameUpdateText.length)];
+	
+		botText.innerHTML = ranNewBotGameText;
 		
 	}
 
@@ -451,6 +502,27 @@ function resetScoreUpdate() {
 	
 		botText.innerHTML = ranResetText;
 	}
+	if (humanBotGame() == true) {
+		
+		var botLosingReset = ""
+		
+		if(botX.selected == true && xScore < oScore || botO.selected == true && oScore < xScore) {
+			botLosingReset = "Probably for the best. Give me a clean slate and I'll smoke you."
+		}
+		else if (humanX.selected == true && xScore < oScore || humanO.selected == true && oScore < xScore){
+			botLosingReset = "Couldn't handle it could you human? Go ahead and try me again!"
+		}
+		else {
+			botLosingReset = "There's not even any scores on the board!"	
+		}
+		
+		var resetBotUpdateText = [botLosingReset, "Nothing like a fresh slate to start a losing steak on eh?"]
+	
+		var ranBotResetText = resetBotUpdateText[ranNumGen(resetBotUpdateText.length)];
+	
+		botText.innerHTML = ranBotResetText;
+	}
+	
 }
 
 function switchModeUpdate() {
