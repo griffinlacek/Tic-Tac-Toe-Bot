@@ -95,7 +95,8 @@ function easyDifficulty() {
 					spotChoice = ranNumGen(allX.length) 
 				}
 				
-				setOnClick();
+				enableXOnClick();
+				enableOOnClick();
 				allX[spotChoice].click();
 			}
 	}
@@ -110,7 +111,8 @@ function easyDifficulty() {
 					spotChoice = ranNumGen(allO.length) 
 				}
 				
-				setOnClick();
+				enableXOnClick();
+				enableOOnClick();
 				allO[spotChoice].click();
 			}
 	}
@@ -146,6 +148,30 @@ function setOnClick() {
 		}
 	})(i);
 
+}
+
+function enableXOnClick() {
+	
+	for(var i=0; i<allX.length; i++) (function(i){
+		
+		if(allX[i].style.opacity != 1) {
+			allX[i].onclick = function(){
+				spaceUpdate(allX[i]);
+			}
+		}
+	})(i);
+}
+
+function enableOOnClick() {
+	
+	for(var i=0; i<allO.length; i++) (function(i){
+		
+		if(allO[i].style.opacity != 1) {
+			allO[i].onclick = function(){
+				spaceUpdate(allO[i]);
+			}
+		}
+	})(i);
 }
 
 //Disables the onClick events for all X
