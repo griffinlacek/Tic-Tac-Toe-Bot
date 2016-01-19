@@ -288,61 +288,54 @@ function normalDifficulty() {
 
 function hardDifficulty() {
 	
+	var spotChoice = null;
+	
 	if (xBotCheck()) {
 		disableXOnClick();
 		if (turn % 2 != 0) {
 			
-			if (turn == 0) {
-				bestStartSpot = bestStartPick();
+			if (turn == 1) {
+				spotChoice = bestStartPick();
+			}
+			else if (turn != 1) {
+				spotChoice = blockOpponent(allX, allO);
 			}
 			
-			possibleBlockSpot = blockOpponent(allX, allO);
-			
-			if(possibleBlockSpot != null) {
-				enableXOnClick();
-				enableOOnClick();
-				allX[possibleBlockSpot].click();
-			}
-			else {
+			if (spotChoice == null) {
 				spotChoice = ranNumGen(allX.length);
 
 				while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
 						spotChoice = ranNumGen(allX.length) 
 				}
-				
-				enableXOnClick();
-				enableOOnClick();
-				allX[spotChoice].click();
-			}	
-
+			}
+			
+			enableXOnClick();
+			enableOOnClick();
+			allX[spotChoice].click();	
 		}
 	}
 	else if (oBotCheck()) {
 		disableOOnClick();
 		if (turn % 2 == 0) {
 			
-			if (turn == 1) {
-				bestSecondSpot = bestSecondPick();
+			if (turn == 2) {
+				spotChoice = bestSecondPick();
+			}
+			else if (turn != 1) {
+				spotChoice = blockOpponent(allO, allX);
 			}
 			
-			possibleBlockSpot = blockOpponent(allO, allX);
-			
-			if(possibleBlockSpot != null) {
-				enableXOnClick();
-				enableOOnClick();
-				allO[possibleBlockSpot].click();
-			}
-			else {
+			if (spotChoice == null) {
 				spotChoice = ranNumGen(allX.length);
 
 				while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
 						spotChoice = ranNumGen(allX.length) 
 				}
-				
-				enableXOnClick();
-				enableOOnClick();
-				allO[spotChoice].click();
 			}	
+			
+			enableXOnClick();
+			enableOOnClick();
+			allO[spotChoice].click();
 
 		}
 	}
@@ -361,7 +354,7 @@ function blockOpponent(botArray, oppArray) {
 	j = 1;
 	k = 2;
 	
-	for(var i=0; i < (winLines.length - 3); i = i + 3) {
+	for(var i=0; i <= (winLines.length - 3); i = i + 3) {
 		blockSpot = checkBlockOpacity(botArray, oppArray, winLines[i], winLines[j], winLines[k]);
 		
 		if (blockSpot != null) {
@@ -372,14 +365,40 @@ function blockOpponent(botArray, oppArray) {
 			k = k + 3;
 		}
 	}
+	
+	return null;
 }
 
 function bestStartPick() {
+	var corners = [0,2,6,8];
 	
+	var ranCorner = corners[ranNumGen(corners.length)];
+	
+	return ranCorner;
 }
 
 function bestSecondPick() {
+	var corners = [0,2,6,8];
+	var center = 4;
 	
+	//Check if opponent picked a corner. Pick center if so.
+	for(var i=0; i < corners.length; i++) {
+		if (allX[corners[i]].style.opacity == 1) {
+			return center;
+		}
+	}
+	
+	//If center taken by opponent
+	if (allX[center].style.opacity == 1) {
+		var ranCorner = bestStartPick();
+	
+		return ranCorner;
+	}
+	//Return center if any edge is taken
+	else {
+		return center;
+	}
+
 }
 function spaceUpdate(space) {
 	
