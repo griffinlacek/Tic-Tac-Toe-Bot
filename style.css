@@ -162,12 +162,20 @@ h3 {
 #players {
 	width: 280px;
 	height: 60px;
-	padding-top: 5px;
 }
 
 .playerBox {
-	width: 140px;
-	float: left;
+	width: 280px;
+}
+
+select {
+	border: 1px solid #ccc;
+	background: transparent;
+	width: 130px;
+	height: 34px;
+	font: 17px 'Raleway', Helvetica;
+	background: #eee;
+	
 }
 
 #difficulty {
