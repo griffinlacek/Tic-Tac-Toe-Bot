@@ -1,6 +1,9 @@
 //Set turn number to 1
 var turn = 1
 
+//Set true when turn == 9
+botGameEnded = false;
+
 //Team X Score
 var xScore = 0;
 
@@ -122,7 +125,7 @@ function humanGame() {
 
 //Checks if game is between human and bot
 function easyBotCheck() {
-	if (humanX.selected == true && easyBotO.selected == true || humanO.selected == true && easyBotX.selected == true) {
+	if (easyBotO.selected == true || easyBotX.selected == true) {
 		return true;
 	}
 	else {
@@ -131,7 +134,7 @@ function easyBotCheck() {
 }
 
 function normalBotCheck() {
-	if (humanX.selected == true && normalBotO.selected == true || humanO.selected == true && normalBotX.selected == true) {
+	if (normalBotO.selected == true || normalBotX.selected == true) {
 		return true;
 	}
 	else {
@@ -141,7 +144,7 @@ function normalBotCheck() {
 
 
 function hardBotCheck() {
-	if (humanX.selected == true && hardBotO.selected == true || humanO.selected == true && hardBotX.selected == true) {
+	if (hardBotO.selected == true || hardBotX.selected == true) {
 		return true;
 	}
 	else {
@@ -151,7 +154,7 @@ function hardBotCheck() {
 
 
 function expertBotCheck() {
-	if (humanX.selected == true && expertBotO.selected == true || humanO.selected == true && expertBotX.selected == true) {
+	if (expertBotO.selected == true || expertBotX.selected == true) {
 		return true;
 	}
 	else {
@@ -199,11 +202,53 @@ function botGame() {
 
 function easyDifficulty() {
 	
-	if (xBotCheck()) {
+	if (botGameEnded == false) {
+	
+	if (xBotCheck() && (turn % 2) != 0) {
 		disableXOnClick();
-		if (turn % 2 != 0) {
 				
-			spotChoice = ranNumGen(allX.length)
+		spotChoice = ranNumGen(allX.length)
+
+		while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
+				spotChoice = ranNumGen(allX.length) 
+		}
+				
+		enableXOnClick();
+		enableOOnClick();
+		allX[spotChoice].click();
+	}
+	else if (oBotCheck() && turn % 2 == 0) {
+		disableOOnClick();		
+			
+		spotChoice = ranNumGen(allO.length)
+				
+		while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
+				spotChoice = ranNumGen(allO.length) 
+		}
+				
+		enableXOnClick();
+		enableOOnClick();
+		allO[spotChoice].click();
+	}
+	}
+}
+
+function normalDifficulty() {
+	
+	if (botGameEnded != true) {
+	
+	if (xBotCheck() && turn % 2 != 0) {
+		disableXOnClick();
+			
+		possibleBlockSpot = blockOpponent(allX, allO);
+			
+		if(possibleBlockSpot != null) {
+				enableXOnClick();
+				enableOOnClick();
+				allX[possibleBlockSpot].click();
+		}
+		else {
+			spotChoice = ranNumGen(allX.length);
 
 			while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
 					spotChoice = ranNumGen(allX.length) 
@@ -214,75 +259,28 @@ function easyDifficulty() {
 			allX[spotChoice].click();
 		}
 	}
-	else {
+	else if (oBotCheck() && turn % 2 == 0) {
 		disableOOnClick();
-		if (turn % 2 == 0) {
-				
-			spotChoice = ranNumGen(allO.length)
-				
+		
+		possibleBlockSpot = blockOpponent(allO, allX);
+		
+		if(possibleBlockSpot != null) {
+			enableXOnClick();
+			enableOOnClick();
+			allO[possibleBlockSpot].click();
+		}
+		else {
+			spotChoice = ranNumGen(allX.length);
+
 			while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
-					spotChoice = ranNumGen(allO.length) 
+					spotChoice = ranNumGen(allX.length) 
 			}
-				
+			
 			enableXOnClick();
 			enableOOnClick();
 			allO[spotChoice].click();
-		}
+		}	
 	}
-
-}
-
-function normalDifficulty() {
-	
-	if (xBotCheck()) {
-		disableXOnClick();
-		if (turn % 2 != 0) {
-			
-			possibleBlockSpot = blockOpponent(allX, allO);
-			
-			if(possibleBlockSpot != null) {
-				enableXOnClick();
-				enableOOnClick();
-				allX[possibleBlockSpot].click();
-			}
-			else {
-				spotChoice = ranNumGen(allX.length);
-
-				while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
-						spotChoice = ranNumGen(allX.length) 
-				}
-				
-				enableXOnClick();
-				enableOOnClick();
-				allX[spotChoice].click();
-			}	
-
-		}
-	}
-	else if (oBotCheck()) {
-		disableOOnClick();
-		if (turn % 2 == 0) {
-			
-			possibleBlockSpot = blockOpponent(allO, allX);
-			
-			if(possibleBlockSpot != null) {
-				enableXOnClick();
-				enableOOnClick();
-				allO[possibleBlockSpot].click();
-			}
-			else {
-				spotChoice = ranNumGen(allX.length);
-
-				while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
-						spotChoice = ranNumGen(allX.length) 
-				}
-				
-				enableXOnClick();
-				enableOOnClick();
-				allO[spotChoice].click();
-			}	
-
-		}
 	}
 }
 
@@ -290,9 +288,10 @@ function hardDifficulty() {
 	
 	var spotChoice = null;
 	
-	if (xBotCheck()) {
+	if (botGameEnded != true) {
+		
+	if (xBotCheck() && (turn % 2) != 0) {
 		disableXOnClick();
-		if (turn % 2 != 0) {
 			
 			if (turn == 1) {
 				spotChoice = bestStartPick();
@@ -311,12 +310,10 @@ function hardDifficulty() {
 			
 			enableXOnClick();
 			enableOOnClick();
-			allX[spotChoice].click();	
-		}
+			allX[spotChoice].click();
 	}
-	else if (oBotCheck()) {
+	else if (oBotCheck() && (turn % 2) == 0) {
 		disableOOnClick();
-		if (turn % 2 == 0) {
 			
 			if (turn == 2) {
 				spotChoice = bestSecondPick();
@@ -336,10 +333,8 @@ function hardDifficulty() {
 			enableXOnClick();
 			enableOOnClick();
 			allO[spotChoice].click();
-
-		}
 	}
-	
+}
 }
 
 function expertDifficulty() {
@@ -459,6 +454,9 @@ function spaceUpdate(space) {
 	}
 	
 	if (turn == 9) {
+		if (botGame()) {
+			botGameEnded = true;
+		}
 		disableXOnClick();
 		disableOOnClick();
 		return;
@@ -466,7 +464,7 @@ function spaceUpdate(space) {
 	
 	turn++;
 	
-	if(humanBotGame() == true) {
+	if(humanBotGame()) {
 		if (easyBotCheck()) {
 			easyDifficulty();
 		}
@@ -477,6 +475,34 @@ function spaceUpdate(space) {
 			hardDifficulty();
 		}
 		else if (expertBotCheck()) {
+			expertDifficulty();
+		}
+	}
+	else if (botGame() && turn % 2 != 0) {
+		if (easyBotX.selected) {
+			easyDifficulty();
+		}
+		else if (normalBotX.selected) {
+			normalDifficulty();
+		}
+		else if (hardBotX.selected) {
+			hardDifficulty();
+		}
+		else if (expertBotX.selected) {
+			expertDifficulty();
+		}
+	}
+	else if  (botGame() && turn % 2 == 0) {
+		if (easyBotO.selected) {
+			easyDifficulty();
+		}
+		else if (normalBotO.selected) {
+			normalDifficulty();
+		}
+		else if (hardBotO.selected) {
+			hardDifficulty();
+		}
+		else if (expertBotO.selected) {
 			expertDifficulty();
 		}
 	}
@@ -508,8 +534,9 @@ function resetGame() {
 	setOnClick();
 	
 	turn = 1;
+	botGameEnded = false;
 	
-	if (xBotCheck() && humanO.selected == true) {
+	if (humanBotGame() && xBotCheck()) {
 		if (easyBotCheck()) {
 			easyDifficulty();
 		}
@@ -520,6 +547,20 @@ function resetGame() {
 			hardDifficulty();
 		}
 		else if (expertBotCheck()) {
+			expertDifficulty();
+		}
+	}
+	else if (botGame()) {
+		if (easyBotX.selected) {
+			easyDifficulty();
+		}
+		else if (normalBotX.selected) {
+			normalDifficulty();
+		}
+		else if (hardBotX.selected) {
+			hardDifficulty();
+		}
+		else if (expertBotX.selected) {
 			expertDifficulty();
 		}
 	}
@@ -698,7 +739,7 @@ function tieUpdate() {
 	
 		botText.innerHTML = ranTieText;
 	}
-	if (humanBotGame() == true) {
+	else if (humanBotGame() == true) {
 		var botTieUpdateText = ["Cat's Game! Interestingly I hate cats...", "Oh I was so close! Next time I'll get you.",
 		"A tie against you? I should be winning every game against silly humans.", 
 		"What's boring, rhymes with 'why', and the color yellow? A tie."]
@@ -720,7 +761,7 @@ function newGameUpdate() {
 		botText.innerHTML = ranNewGameText;
 	}
 	
-	if (humanBotGame() == true) {
+	else if (humanBotGame() == true) {
 		
 		var botnewGame = ""
 		
@@ -768,7 +809,7 @@ function resetScoreUpdate() {
 	
 		botText.innerHTML = ranResetText;
 	}
-	if (humanBotGame() == true) {
+	else if (humanBotGame() == true) {
 		
 		var botLosingReset = ""
 		
@@ -806,7 +847,7 @@ function switchModeUpdate() {
 		if (easyBotCheck()) {
 			botText.innerHTML = "Oh sure play me at my weakest. COWARD!"
 			
-			if(easyBotX.selected == true && humanO.selected == true) {
+			if(easyBotX.selected == true) {
 				easyDifficulty();
 			}
 		}
@@ -837,5 +878,17 @@ function switchModeUpdate() {
 	}
 	else if (botGame()) {
 		botText.innerHTML = "Oh great you want me to play against myself. Like I can't do that any other time..."
+		if(easyBotX.selected) {
+			easyDifficulty();
+		}
+		else if (normalBotX.selected) {
+			normalDifficulty();
+		}
+		else if (hardBotX.selected) {
+			hardDifficulty();
+		}
+		else if (expertBotX.selected) {
+			expertDifficulty();
+		}
 	}
 }
