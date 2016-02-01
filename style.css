@@ -16,8 +16,6 @@ body {
 	background: #171717;
 	font: 16px 'Raleway', Helvetica, Verdana, Arial;
 	color: 	#f4f4f0;
-	#efefef
-	
 }
 
 #wrapper {
@@ -242,6 +240,11 @@ select {
 footer {
 	color: #6f6f6f;
 	margin: 15px 0px;
+}
+
+footer a {
+	color: #6f6f6f;
+	text-decoration: none;
 }
 
 

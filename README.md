@@ -8,6 +8,9 @@ To-Do
 2. Allow bot mode to be selected. (DONE)
 3. Implement Easy difficulty (primarily setting up the bot's ability to play). (DONE)
 4. Complete Sassy Personality Module for Bot vs Human. (DONE)
-5. Add remaining difficulty modes. (IN PROGRESS)
+5. Add remaining difficulty modes. (DONE)
 6. Implement Bot vs. Bot games. (DONE)
-7. Complete Personality for Bot vs. Bot.
+7. Complete Personality for Bot vs. Bot. (DONE)
+8. Add variability to expert bot mode.
+
+	

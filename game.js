@@ -37,7 +37,6 @@ var normalBotO = document.getElementById("normalBotO");
 var hardBotO = document.getElementById("hardBotO");
 var expertBotO = document.getElementById("expertBotO");
 
-
 //Setup Tic-Tac-Toe Game
 setupGame();
 
@@ -142,7 +141,6 @@ function normalBotCheck() {
 	}
 }
 
-
 function hardBotCheck() {
 	if (hardBotO.selected == true || hardBotX.selected == true) {
 		return true;
@@ -151,7 +149,6 @@ function hardBotCheck() {
 		return false;
 	}
 }
-
 
 function expertBotCheck() {
 	if (expertBotO.selected == true || expertBotX.selected == true) {
@@ -199,88 +196,66 @@ function botGame() {
 	}
 }
 
+/* Difficulty Modes */
 
 function easyDifficulty() {
 	
 	if (botGameEnded == false) {
 	
-	if (xBotCheck() && (turn % 2) != 0) {
-		disableXOnClick();
+		if (xBotCheck() && (turn % 2) != 0) {
+			disableXOnClick();
 				
-		spotChoice = ranNumGen(allX.length)
-
-		while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
-				spotChoice = ranNumGen(allX.length) 
+			spotChoice = pickRandomSpot();	
+					
+			enableXOnClick();
+			enableOOnClick();
+			allX[spotChoice].click();
 		}
-				
-		enableXOnClick();
-		enableOOnClick();
-		allX[spotChoice].click();
-	}
-	else if (oBotCheck() && turn % 2 == 0) {
-		disableOOnClick();		
+		else if (oBotCheck() && turn % 2 == 0) {
+			disableOOnClick();		
 			
-		spotChoice = ranNumGen(allO.length)
+			spotChoice = pickRandomSpot();	
 				
-		while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
-				spotChoice = ranNumGen(allO.length) 
+			enableXOnClick();
+			enableOOnClick();
+			allO[spotChoice].click();
 		}
-				
-		enableXOnClick();
-		enableOOnClick();
-		allO[spotChoice].click();
-	}
 	}
 }
 
 function normalDifficulty() {
 	
+	var spotChoice = null;
+	
 	if (botGameEnded != true) {
 	
-	if (xBotCheck() && turn % 2 != 0) {
-		disableXOnClick();
+		if (xBotCheck() && turn % 2 != 0) {
+			disableXOnClick();
 			
-		possibleBlockSpot = blockOpponent(allX, allO);
-			
-		if(possibleBlockSpot != null) {
-				enableXOnClick();
-				enableOOnClick();
-				allX[possibleBlockSpot].click();
-		}
-		else {
-			spotChoice = ranNumGen(allX.length);
+			spotChoice = winningMove(allO, allX);
 
-			while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
-					spotChoice = ranNumGen(allX.length) 
+			if (spotChoice == null) {	
+				spotChoice = pickRandomSpot();
 			}
 				
 			enableXOnClick();
 			enableOOnClick();
 			allX[spotChoice].click();
 		}
-	}
-	else if (oBotCheck() && turn % 2 == 0) {
-		disableOOnClick();
+		else if (oBotCheck() && turn % 2 == 0) {
+			disableOOnClick();
 		
-		possibleBlockSpot = blockOpponent(allO, allX);
+			spotChoice = winningMove(allX, allO);
 		
-		if(possibleBlockSpot != null) {
-			enableXOnClick();
-			enableOOnClick();
-			allO[possibleBlockSpot].click();
-		}
-		else {
-			spotChoice = ranNumGen(allX.length);
-
-			while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
-					spotChoice = ranNumGen(allX.length) 
+			if(spotChoice == null) {
+				spotChoice = pickRandomSpot();
 			}
-			
+
 			enableXOnClick();
 			enableOOnClick();
 			allO[spotChoice].click();
-		}	
-	}
+		
+		}
 	}
 }
 
@@ -290,59 +265,217 @@ function hardDifficulty() {
 	
 	if (botGameEnded != true) {
 		
-	if (xBotCheck() && (turn % 2) != 0) {
+		if (xBotCheck() && (turn % 2) != 0) {
 		disableXOnClick();
 			
 			if (turn == 1) {
-				spotChoice = bestStartPick();
+				spotChoice = pickCorner(allO);
 			}
 			else if (turn != 1) {
-				spotChoice = blockOpponent(allX, allO);
-			}
-			
-			if (spotChoice == null) {
-				spotChoice = ranNumGen(allX.length);
-
-				while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
-						spotChoice = ranNumGen(allX.length) 
+				//Checks for possible winning move.
+				spotChoice = winningMove(allX, allO);
+				
+				if (spotChoice == null) {
+					//Checks for opponent winning move to block.
+					spotChoice = winningMove(allO, allX);
 				}
+			}
+			if(spotChoice == null) {
+				spotChoice = pickRandomSpot();	
 			}
 			
 			enableXOnClick();
 			enableOOnClick();
 			allX[spotChoice].click();
-	}
-	else if (oBotCheck() && (turn % 2) == 0) {
+		}
+		
+		else if (oBotCheck() && (turn % 2) == 0) {
 		disableOOnClick();
 			
 			if (turn == 2) {
 				spotChoice = bestSecondPick();
 			}
 			else if (turn != 1) {
-				spotChoice = blockOpponent(allO, allX);
+				//Checks for possible winning move.
+				spotChoice = winningMove(allO, allX);
+				
+				if (spotChoice == null) {
+					//Checks for opponent winning move to block.
+					spotChoice = winningMove(allX, allO);
+				}
 			}
 			
 			if (spotChoice == null) {
-				spotChoice = ranNumGen(allX.length);
-
-				while (allO[spotChoice].style.opacity == 1 || allX[spotChoice].style.opacity == 1) {
-						spotChoice = ranNumGen(allX.length) 
-				}
+				spotChoice = pickRandomSpot();
 			}	
 			
 			enableXOnClick();
 			enableOOnClick();
 			allO[spotChoice].click();
+		}
 	}
-}
 }
 
 function expertDifficulty() {
 	
+	var spotChoice = null;
+	
+	if (botGameEnded != true) {
+		
+		if (xBotCheck() && (turn % 2) != 0) {
+		disableXOnClick();
+			
+			if (turn == 1) {
+				spotChoice = pickCorner(allO);
+			}
+			else if (turn != 1) {
+				//Checks for possible winning move.
+				spotChoice = winningMove(allX, allO);
+				
+				if (spotChoice == null) {
+					//Checks for opponent winning move to block.
+					spotChoice = winningMove(allO, allX);
+				}
+			}
+			
+			//Attempts to create fork.
+			if (spotChoice == null) {
+				spotChoice = createFork(allX, allO);
+			}
+			
+			//Attempts to block oppponent fork.
+			if (spotChoice == null) {
+				spotChoice = blockFork(allX, allO);
+			}
+			
+			//Attempts to pick best available spot
+			if (spotChoice == null) {
+				spotChoice = bestAvailablePick(allX, allO)
+			}
+			
+			enableXOnClick();
+			enableOOnClick();
+			allX[spotChoice].click();
+		}
+		
+		else if (oBotCheck() && (turn % 2) == 0) {
+		disableOOnClick();
+			
+			if (turn == 2) {
+				spotChoice = bestAvailablePick(allO, allX);
+			}
+			else if (spotChoice == null) {
+				//Checks for possible winning move.
+				spotChoice = winningMove(allO, allX);
+				
+				if (spotChoice == null) {
+					//Checks for opponent winning move to block.
+					spotChoice = winningMove(allX, allO);
+				}
+			}
+			
+			//Attempts to create fork.
+			if (spotChoice == null) {
+				spotChoice = createFork(allO, allX);
+			}
+			
+			//Attempts to block oppponent fork.
+			if (spotChoice == null) {
+				spotChoice = blockFork(allO, allX);
+			}
+			
+			//Attempts to pick best available spot
+			if (spotChoice == null) {
+				spotChoice = bestAvailablePick(allO, allX)
+			}
+						
+			enableXOnClick();
+			enableOOnClick();
+			allO[spotChoice].click();
+		}
+	}
 
 }
 
-function blockOpponent(botArray, oppArray) {
+/* Bot AI Helper Methods */
+
+function spotFree(spot) {
+	if (allX[spot].style.opacity != 1 && allO[spot].style.opacity != 1) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+function pickRandomSpot() {
+	
+	ranSpot = ranNumGen(allX.length);
+
+	while (allO[ranSpot].style.opacity == 1 || allX[ranSpot].style.opacity == 1) {
+		ranSpot = ranNumGen(allX.length) 
+	}
+	
+	return ranSpot;
+}
+
+function pickCorner(oppArray) {
+	var corners = [[0,8], [2,6]];
+	var openCorners = [];
+	
+	for (var i=0; i<corners.length; i++) {
+		var firstCorner = corners[i][0];
+		var secondCorner = corners[i][1];
+		
+		if (spotFree(firstCorner) == true) {
+			openCorners.push(firstCorner);
+			
+			if (oppArray[secondCorner].style.opacity == 1) {
+				return firstCorner;
+			}
+		}
+		else if (spotFree(secondCorner) == true) {
+			openCorners.push(secondCorner);
+			
+			if (oppArray[firstCorner].style.opacity == 1) {
+				return secondCorner;
+			}
+		}
+	}
+	
+	if (openCorners.length != 0) {
+		var ranCorner = openCorners[ranNumGen(openCorners.length)];
+	
+		return ranCorner;
+	}
+	else {
+		return null;
+	}
+
+}
+
+function pickSide() {
+	var sides = [1,3,5,7];
+	var openSides = [];
+	
+	for (var i=0; i<sides.length; i++) {
+		var currSide = sides[i];
+		if (spotFree(currSide) == true) {
+			openSides.push(currSide);
+		}
+	}
+	
+	if (openSides.length != 0) {
+		var ranSide = openSides[ranNumGen(openSides.length)];
+	
+		return ranSide;
+	}
+	else {
+		return null;
+	}
+}
+
+function winningMove(winArray, oppArray) {
 	
 	winLines = [0,1,2,3,4,5,6,7,8,0,3,6,1,4,7,2,5,8,0,4,8,2,4,6];
 	
@@ -350,10 +483,10 @@ function blockOpponent(botArray, oppArray) {
 	k = 2;
 	
 	for(var i=0; i <= (winLines.length - 3); i = i + 3) {
-		blockSpot = checkBlockOpacity(botArray, oppArray, winLines[i], winLines[j], winLines[k]);
+		winSpot = checkWinningMoveOpacity(winArray, oppArray, winLines[i], winLines[j], winLines[k]);
 		
-		if (blockSpot != null) {
-			return blockSpot;
+		if (winSpot != null) {
+			return winSpot;
 		}
 		else {
 			j = j + 3;
@@ -364,37 +497,158 @@ function blockOpponent(botArray, oppArray) {
 	return null;
 }
 
-function bestStartPick() {
-	var corners = [0,2,6,8];
-	
-	var ranCorner = corners[ranNumGen(corners.length)];
-	
-	return ranCorner;
-}
-
-function bestSecondPick() {
-	var corners = [0,2,6,8];
+function bestAvailablePick(botArray, oppArray) {
 	var center = 4;
 	
-	//Check if opponent picked a corner. Pick center if so.
-	for(var i=0; i < corners.length; i++) {
-		if (allX[corners[i]].style.opacity == 1) {
-			return center;
+	//Take available center
+	if (spotFree(center) == true) {	
+		return center;
+	}
+	
+	var ranCorner = pickCorner(oppArray);
+	
+	if (ranCorner != null) {
+		return ranCorner;
+	}
+	
+	var ranSide = pickSide();
+	
+	if (ranSide !=  null) {
+		return ranSide;
+	}
+
+}
+
+function createFork(botArray, oppArray) {
+	
+	var forkSpot = null;
+	
+	winLines = getWinLines(botArray, oppArray);
+		
+	forkSpots = getForkSpots(winLines, botArray);	
+	
+	if (forkSpots.length != 0) {
+		forkSpot = forkSpots[ranNumGen(forkSpots.length)];
+	}
+	
+	return forkSpot;
+
+}
+
+function blockFork(botArray, oppArray) {
+	
+		oppWinLines = getWinLines(oppArray, botArray);
+	
+		possibleOppForks = getForkSpots(oppWinLines, botArray);
+	
+		if (possibleOppForks.length != 0) {
+			
+			botWinLines = getWinLines(botArray, oppArray);
+			
+			if (botWinLines != null) {
+				blockSpot = getForkBlock(botWinLines, possibleOppForks);
+			}
+			
+			if(possibleOppForks.length == 1 && possibleOppForks[0] != blockSpot) {
+				return possibleOppForks[0];
+			}
+			else {
+				return blockSpot;
+			}
+		}
+		
+		return null;
+}
+
+function getWinLines(winArray, oppArray) {
+	
+	possibleWins = [0,1,2,3,4,5,6,7,8,0,3,6,1,4,7,2,5,8,0,4,8,2,4,6];
+	
+	winLines = "";
+		
+	k = 1;
+	l = 2;
+	
+	for(var j=0; j <= (possibleWins.length - 3); j = j + 3) {
+		winOption = checkWinLineOpacity(winArray, oppArray, possibleWins[j], possibleWins[k], possibleWins[l]);
+		
+		if (winOption != null) {
+			winLines = winLines + winOption;
+		}
+			
+		k = k + 3;
+		l = l + 3;
+	}
+	
+	if (winLines != "") {
+		return winLines;
+	}
+	else {
+		return null;
+	}
+
+}
+
+function getForkSpots(winLines, botArray) {
+	
+	forkSpots = [];
+	
+	if (winLines == null) {
+		return forkSpots;
+	}
+	
+	for (var i=0; i<winLines.length; i++) {
+		var count = 0;
+		var key = winLines[i];
+	
+		for (var j=0; j<winLines.length; j++) {
+			if (key == winLines[j]) {
+				count++;
+			}
+			
+			if (count == 2 && forkSpots.indexOf(key) == -1) {
+				forkSpots.push(key);
+				j = winLines.length;
+			}
 		}
 	}
 	
-	//If center taken by opponent
-	if (allX[center].style.opacity == 1) {
-		var ranCorner = bestStartPick();
-	
-		return ranCorner;
-	}
-	//Return center if any edge is taken
-	else {
-		return center;
-	}
-
+	return forkSpots;
 }
+
+function getForkBlock(winLines, oppForks) {
+	
+	safeBlockSpots = [];
+	
+	for (var i=0; i<(winLines.length / 2); i = i + 2) {
+		var count = 0;
+		var firstSpot = winLines[i];
+		var secondSpot = winLines[i + 1];
+		
+		if (oppForks.indexOf(firstSpot) == -1 && oppForks.indexOf(secondSpot) == -1) {
+			safeBlockSpots.push(firstSpot);
+			safeBlockSpots.push(secondSpot);			
+		}
+		else if(oppForks.indexOf(firstSpot) != -1 && oppForks.indexOf(secondSpot) == -1) {
+			safeBlockSpots.push(firstSpot);
+		}
+		else if (oppForks.indexOf(secondSpot) != -1 && oppForks.indexOf(firstSpot) == -1) {
+			safeBlockSpots.push(secondSpot);
+		}
+	}
+	
+	if(safeBlockSpots.length != 0) {
+		randomBlockSpot = safeBlockSpots[ranNumGen(safeBlockSpots.length)];
+		
+		return randomBlockSpot;
+	}
+	else {
+		return null;
+	}
+}
+
+/* Gameplay functions */
+
 function spaceUpdate(space) {
 	
 	if (turn % 2 != 0) {
@@ -453,7 +707,7 @@ function spaceUpdate(space) {
 		return;
 	}
 	
-	if (turn == 9) {
+	if (turn == 9 && botGameEnded == false) {
 		if (botGame()) {
 			botGameEnded = true;
 		}
@@ -535,6 +789,13 @@ function resetGame() {
 	
 	turn = 1;
 	botGameEnded = false;
+	
+	if (xScore >= 99 || oScore >= 99) {
+		xScore = 0;
+		oScore = 0;
+		
+		botText.innerHTML = "You're going to have to buy my upgrade kit if you want to go past 100!"
+	}
 	
 	if (humanBotGame() && xBotCheck()) {
 		if (easyBotCheck()) {
@@ -620,20 +881,42 @@ function checkWinOpacity(array, i1, i2, i3) {
 		}
 }
 
-function checkBlockOpacity(botArray, oppArray, i1, i2, i3) {
+function checkWinningMoveOpacity(winArray, oppArray, i1, i2, i3) {
 	
-		if (oppArray[i1].style.opacity == 0 && oppArray[i2].style.opacity == 1 && oppArray[i3].style.opacity == 1 && botArray[i1].style.opacity == 0) {
+		if (winArray[i1].style.opacity == 0 && winArray[i2].style.opacity == 1 && winArray[i3].style.opacity == 1 && oppArray[i1].style.opacity == 0) {
 				return i1;
 		}
-		else if (oppArray[i1].style.opacity == 1 && oppArray[i2].style.opacity == 0 && oppArray[i3].style.opacity == 1 && botArray[i2].style.opacity == 0) {
+		else if (winArray[i1].style.opacity == 1 && winArray[i2].style.opacity == 0 && winArray[i3].style.opacity == 1 && oppArray[i2].style.opacity == 0) {
 				return i2;
 		}
-		else if (oppArray[i1].style.opacity == 1 && oppArray[i2].style.opacity == 1 && oppArray[i3].style.opacity == 0 && botArray[i3].style.opacity == 0) {
+		else if (winArray[i1].style.opacity == 1 && winArray[i2].style.opacity == 1 && winArray[i3].style.opacity == 0 && oppArray[i3].style.opacity == 0) {
 				return i3;
 		}	
 		else {
 			return null;
 		}
+}
+
+function checkWinLineOpacity(winArray, oppArray, i1, i2, i3) {
+	
+	var possibleWinLine = '';
+	
+	if (winArray[i1].style.opacity == 1 && winArray[i2].style.opacity == 0 && winArray[i3].style.opacity == 0 && oppArray[i2].style.opacity == 0 && oppArray[i3].style.opacity == 0) {
+			possibleWinLine = possibleWinLine + i2 + i3;
+			return possibleWinLine;
+	}
+	else if (winArray[i1].style.opacity == 0 && winArray[i2].style.opacity == 1 && winArray[i3].style.opacity == 0 && oppArray[i1].style.opacity == 0 && oppArray[i3].style.opacity == 0) {
+			possibleWinLine = possibleWinLine + i1 + i3;
+			return possibleWinLine;
+	}
+	else if (winArray[i1].style.opacity == 0 && winArray[i2].style.opacity == 0 && winArray[i3].style.opacity == 1 && oppArray[i1].style.opacity == 0 && oppArray[i2].style.opacity == 0) {
+			possibleWinLine = possibleWinLine + i1 + i2;
+			return possibleWinLine;
+	}	
+	else {
+		return null;
+	}
+
 }
 
 function xWins() {
@@ -642,6 +925,10 @@ function xWins() {
 	winUpdate("X");
 	disableXOnClick();
 	disableOOnClick();
+	
+	if (botGame()) {
+		botGameEnded = true;
+	}
 }
 
 function oWins() {
@@ -650,6 +937,10 @@ function oWins() {
 	winUpdate("O")
 	disableXOnClick();
 	disableOOnClick();
+	
+	if (botGame()) {
+		botGameEnded = true;
+	}
 }
 
 function resetScores() {
@@ -661,16 +952,13 @@ function resetScores() {
 	oScoreView.textContent = 0;
 }
 
-
 /* Functions related to Bot text updates */
 
 function ranNumGen(size) {
 	
 	var ranNumber = Math.floor(Math.random() * size);
 	
-	while (lastRanNum == ranNumber) {
-		ranNumber = Math.floor(Math.random() * size);
-	}
+
 	
 	lastRanNum = ranNumber;
 	return ranNumber;
@@ -723,8 +1011,11 @@ function winUpdate(winner) {
 			var humanBotText = humanWinUpdateText[ranNumGen(humanWinUpdateText.length)];
 	
 			botText.innerHTML = humanBotText;	
-		}
-		
+		}	
+	}
+	
+	else if (botGame() == true) {
+		botText.innerHTML = "Oh yay I won. Or did I lose?";
 	}
 
 }
@@ -747,6 +1038,15 @@ function tieUpdate() {
 		var ranBotTieText = botTieUpdateText[ranNumGen(botTieUpdateText.length)];
 	
 		botText.innerHTML = ranBotTieText;
+	}
+	else if(botGame() == true) {
+		var botGameTieUpdateText = ["Do you get some sick kick out of watching me play this?", 
+		"Oh look at that I tied. Like I couldn't see that coming!", 
+		"I should have gone to dental school like my parents wanted."];
+		
+		var ranBotGameTieText = botGameTieUpdateText[ranNumGen(botGameTieUpdateText.length)];
+		
+		botText.innerHTML = ranBotGameTieText;
 	}
 }
 
