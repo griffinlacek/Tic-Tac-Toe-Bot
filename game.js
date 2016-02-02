@@ -293,7 +293,7 @@ function hardDifficulty() {
 		disableOOnClick();
 			
 			if (turn == 2) {
-				spotChoice = bestSecondPick();
+				spotChoice = bestAvailablePick(allO, allX);
 			}
 			else if (turn != 1) {
 				//Checks for possible winning move.
