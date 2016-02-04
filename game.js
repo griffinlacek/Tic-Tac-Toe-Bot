@@ -1,5 +1,5 @@
 //Set turn number to 1
-var turn = 1
+var turn = 1;
 
 //Set true when turn == 9
 botGameEnded = false;
@@ -20,7 +20,7 @@ var botText = document.getElementById("bottalk");
 var allX = document.getElementsByClassName("x");
 var allO = document.getElementsByClassName("o");
 var newGameButton = document.getElementById("newGame");
-var resetScoresButton = document.getElementById("resetScore")
+var resetScoresButton = document.getElementById("resetScore");
 var xScoreView = document.getElementById("xScore");
 var oScoreView = document.getElementById("oScore");
 
@@ -57,15 +57,16 @@ function setOnClick() {
 		
 		allX[i].onclick = function(){
 			spaceUpdate(allX[i]);
-		}
+		};
 		
 		allO[i].onclick = function(){
 			spaceUpdate(allO[i]);
-		}
+		};
 	})(i);
 
 }
 
+//Enables onClick functions for all X
 function enableXOnClick() {
 	
 	for(var i=0; i<allX.length; i++) (function(i){
@@ -73,11 +74,12 @@ function enableXOnClick() {
 		if(allX[i].style.opacity != 1) {
 			allX[i].onclick = function(){
 				spaceUpdate(allX[i]);
-			}
+			};
 		}
 	})(i);
 }
 
+//Enables onClick functions for all O
 function enableOOnClick() {
 	
 	for(var i=0; i<allO.length; i++) (function(i){
@@ -85,7 +87,7 @@ function enableOOnClick() {
 		if(allO[i].style.opacity != 1) {
 			allO[i].onclick = function(){
 				spaceUpdate(allO[i]);
-			}
+			};
 		}
 	})(i);
 }
@@ -112,6 +114,8 @@ function disableOOnClick() {
 	
 }
 
+/* --------- Checks for game modes --------- */
+
 //Checks if game is between two humans
 function humanGame() {
 	if (humanX.selected == true && humanO.selected == true) {
@@ -123,60 +127,6 @@ function humanGame() {
 }
 
 //Checks if game is between human and bot
-function easyBotCheck() {
-	if (easyBotO.selected == true || easyBotX.selected == true) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-function normalBotCheck() {
-	if (normalBotO.selected == true || normalBotX.selected == true) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-function hardBotCheck() {
-	if (hardBotO.selected == true || hardBotX.selected == true) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-function expertBotCheck() {
-	if (expertBotO.selected == true || expertBotX.selected == true) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-function xBotCheck() {
-	if(easyBotX.selected || normalBotX.selected || hardBotX.selected || expertBotX.selected) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-function oBotCheck() {
-	if(easyBotO.selected || normalBotO.selected || hardBotO.selected || expertBotO.selected) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
 function humanBotGame() {
 	if (xBotCheck() && humanO.selected || oBotCheck() && humanX.selected) {
 		return true;
@@ -196,12 +146,73 @@ function botGame() {
 	}
 }
 
-/* Difficulty Modes */
+//Checks if easy bot is selected
+function easyBotCheck() {
+	if (easyBotO.selected == true || easyBotX.selected == true) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
+//Checks if normal bot is selected
+function normalBotCheck() {
+	if (normalBotO.selected == true || normalBotX.selected == true) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+//Checks if hard bot is selected
+function hardBotCheck() {
+	if (hardBotO.selected == true || hardBotX.selected == true) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+//Checks if expert bot is selected
+function expertBotCheck() {
+	if (expertBotO.selected == true || expertBotX.selected == true) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+//Checks if any of the X bots are selected
+function xBotCheck() {
+	if(easyBotX.selected || normalBotX.selected || hardBotX.selected || expertBotX.selected) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+//Checks if any of the O bots are selected
+function oBotCheck() {
+	if(easyBotO.selected || normalBotO.selected || hardBotO.selected || expertBotO.selected) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+/* --------- Difficulty Modes --------- */
+
+/* Easy difficulty simply calls pickRandomSpot() repeatedly */
 function easyDifficulty() {
 	
 	if (botGameEnded == false) {
-	
+		
 		if (xBotCheck() && (turn % 2) != 0) {
 			disableXOnClick();
 				
@@ -223,6 +234,9 @@ function easyDifficulty() {
 	}
 }
 
+/* Normal difficulty will block opponent winning moves. Otherwise will
+ * call pickRandomSpot() for all moves 
+ */
 function normalDifficulty() {
 	
 	var spotChoice = null;
@@ -232,6 +246,7 @@ function normalDifficulty() {
 		if (xBotCheck() && turn % 2 != 0) {
 			disableXOnClick();
 			
+			//Attempts to block O winning move
 			spotChoice = winningMove(allO, allX);
 
 			if (spotChoice == null) {	
@@ -244,7 +259,8 @@ function normalDifficulty() {
 		}
 		else if (oBotCheck() && turn % 2 == 0) {
 			disableOOnClick();
-		
+			
+			//Attempts to block X winning move
 			spotChoice = winningMove(allX, allO);
 		
 			if(spotChoice == null) {
@@ -259,6 +275,10 @@ function normalDifficulty() {
 	}
 }
 
+/* Hard difficulty will pick the best starting move and second moves
+ * and block opponent winning moves. Otherwise will call pickRandomSpot()
+ * for all other moves.
+ */
 function hardDifficulty() {
 	
 	var spotChoice = null;
@@ -316,6 +336,11 @@ function hardDifficulty() {
 	}
 }
 
+/* Expert difficulty is unable to lose. It will pick sensible starting moves,
+ * block opponent winning moves, attempt to create forks that give it a win in
+ * two spots, and block opponent forks. If none are valid, it will call
+ * bestAvailablePick()
+ */
 function expertDifficulty() {
 	
 	var spotChoice = null;
@@ -350,7 +375,7 @@ function expertDifficulty() {
 			
 			//Attempts to pick best available spot
 			if (spotChoice == null) {
-				spotChoice = bestAvailablePick(allX, allO)
+				spotChoice = bestAvailablePick(allX, allO);
 			}
 			
 			enableXOnClick();
@@ -386,7 +411,7 @@ function expertDifficulty() {
 			
 			//Attempts to pick best available spot
 			if (spotChoice == null) {
-				spotChoice = bestAvailablePick(allO, allX)
+				spotChoice = bestAvailablePick(allO, allX);
 			}
 						
 			enableXOnClick();
@@ -397,8 +422,9 @@ function expertDifficulty() {
 
 }
 
-/* Bot AI Helper Methods */
+/* --------- Bot AI Helper Methods --------- */
 
+//Checks if the spot passed in is free to choose
 function spotFree(spot) {
 	if (allX[spot].style.opacity != 1 && allO[spot].style.opacity != 1) {
 		return true;
@@ -408,21 +434,28 @@ function spotFree(spot) {
 	}
 }
 
+//Picks random free spot on the gameboard
 function pickRandomSpot() {
 	
 	ranSpot = ranNumGen(allX.length);
 
 	while (allO[ranSpot].style.opacity == 1 || allX[ranSpot].style.opacity == 1) {
-		ranSpot = ranNumGen(allX.length) 
+		ranSpot = ranNumGen(allX.length);
 	}
 	
 	return ranSpot;
 }
 
+/* Will pick a corner on the gameboard if available. Will first check if
+ * opponent is in any of the corners and will pick the opposite corner if possible.
+ * Otherwise, will pick any available corners. Takes in paramater oppArray to 
+ * retrieve opponent's corners. Returns NULL if no corners available.
+ */
 function pickCorner(oppArray) {
 	var corners = [[0,8], [2,6]];
 	var openCorners = [];
 	
+	//Checks for available corners opposite to opponent's corners
 	for (var i=0; i<corners.length; i++) {
 		var firstCorner = corners[i][0];
 		var secondCorner = corners[i][1];
@@ -443,6 +476,7 @@ function pickCorner(oppArray) {
 		}
 	}
 	
+	//Picks random open corner
 	if (openCorners.length != 0) {
 		var ranCorner = openCorners[ranNumGen(openCorners.length)];
 	
@@ -454,6 +488,7 @@ function pickCorner(oppArray) {
 
 }
 
+//Picks random open side spot on gameboard
 function pickSide() {
 	var sides = [1,3,5,7];
 	var openSides = [];
@@ -475,6 +510,11 @@ function pickSide() {
 	}
 }
 
+/* Finds winning moves possibilities based on parameters based in. winArray is the array
+ * to find winning moves for. oppArray is the opponent on the board. Iterates through the 
+ * various winning combinations, calling checkWinningMoveOpacity() to determine if that spot
+ * is a winning move spot.
+ */
 function winningMove(winArray, oppArray) {
 	
 	winLines = [0,1,2,3,4,5,6,7,8,0,3,6,1,4,7,2,5,8,0,4,8,2,4,6];
@@ -497,6 +537,9 @@ function winningMove(winArray, oppArray) {
 	return null;
 }
 
+/* Picks the best available pick according to general strategy. Center -> Opposite Corner ->
+ * Random Corner -> Random Side
+ */
 function bestAvailablePick(botArray, oppArray) {
 	var center = 4;
 	
@@ -519,13 +562,17 @@ function bestAvailablePick(botArray, oppArray) {
 
 }
 
+/* Main function to find a possible fork spot. Calls getWinLines() to get current 
+ * winning possibilities and then calls getForkSpots() with those winLines as a parameter. Returns 
+ * a valid forkSpot if possible, otherwise NULL.
+ */
 function createFork(botArray, oppArray) {
 	
 	var forkSpot = null;
 	
 	winLines = getWinLines(botArray, oppArray);
 		
-	forkSpots = getForkSpots(winLines, botArray);	
+	forkSpots = getForkSpots(winLines);	
 	
 	if (forkSpots.length != 0) {
 		forkSpot = forkSpots[ranNumGen(forkSpots.length)];
@@ -535,11 +582,14 @@ function createFork(botArray, oppArray) {
 
 }
 
+/* Main function to find a possible fork block spot. Similar to createFork, but flips the paramters of
+ * getWinLines() and getForkSpots() invocations. Returns a block spot if one exists. Otherwise returns NULL.
+ */
 function blockFork(botArray, oppArray) {
 	
 		oppWinLines = getWinLines(oppArray, botArray);
 	
-		possibleOppForks = getForkSpots(oppWinLines, botArray);
+		possibleOppForks = getForkSpots(oppWinLines);
 	
 		if (possibleOppForks.length != 0) {
 			
@@ -560,6 +610,12 @@ function blockFork(botArray, oppArray) {
 		return null;
 }
 
+/* Winning moves are handled by winningMove() and are checked early on in a bot's turn. winLines are 
+ * considered to be combinations where a player can win with two more spots in a row in addition to a
+ * spot they already own. Function iterates through possible winning combinations, calling checkWinLineOpacity()
+ * to verify if the two additional spots available in a winning combo are available for their currently owned spot.
+ * Returns a string of the additional winning spots available grouped in two. 
+ */ 
 function getWinLines(winArray, oppArray) {
 	
 	possibleWins = [0,1,2,3,4,5,6,7,8,0,3,6,1,4,7,2,5,8,0,4,8,2,4,6];
@@ -589,7 +645,11 @@ function getWinLines(winArray, oppArray) {
 
 }
 
-function getForkSpots(winLines, botArray) {
+/* Gets available fork spots based on winLines. If a spot is repeated twice in the winLines combo
+ * i.e. two winning combinations contain the same spot, then it is added to an array which is returned
+ * with all possible fork spots.
+ */
+function getForkSpots(winLines) {
 	
 	forkSpots = [];
 	
@@ -616,6 +676,11 @@ function getForkSpots(winLines, botArray) {
 	return forkSpots;
 }
 
+/* Gets spot choices that will preemptively block an opponent's fork by forcing the opponent to block a winning
+ * move that does not lead to them choosing a fork spot. Accomplishes this by checking if either of the spots in
+ * the current bot win combo is a part of a fork. If neither are, both are safe block spots. If one is, return the
+ * fork spot so the opponent will be forced to choose a non-fork spot.
+ */
 function getForkBlock(winLines, oppForks) {
 	
 	safeBlockSpots = [];
@@ -647,14 +712,18 @@ function getForkBlock(winLines, oppForks) {
 	}
 }
 
-/* Gameplay functions */
+/* --------- Gameplay functions --------- */
 
+/* Updates the chosen space to display the user/bot spot choice, disabling that user's pick for the next turn
+ * and enabling the opponent to be able to pick the next turn.
+ */
 function spaceUpdate(space) {
 	
 	if (turn % 2 != 0) {
 		
 		if(allX.length > 0) {
 			
+			//Sets all X to hidden for next turn.
 			for(var i=0; i<allX.length; i++) {
 				if (allX[i].style.opacity != 1) {
 					allX[i].style.visibility = "hidden";
@@ -662,11 +731,13 @@ function spaceUpdate(space) {
 			}
 		}
 		
+		//Updates the chosen spot to be visible.
 		space.style.opacity = 1;
 		space.style.visibility = "visible";
 		space.style.cursor = "not-allowed";	
 		space.onclick = false;		
 		
+		//Sets all O to visible for next turn.
 		if(allO.length > 0) {
 			
 			for(var i=0; i<allO.length; i++) {
@@ -679,14 +750,16 @@ function spaceUpdate(space) {
 	else {
 		
 		if(allO.length > 0) {
-			
+		
+			//Sets all O to hidden for next turn.
 			for(var i=0; i<allO.length; i++) {
 				if (allO[i].style.opacity != 1) {
 					allO[i].style.visibility = "hidden";
 				}
 			}
 		}
-			
+		
+		//Updates the chosen spot to be visible.	
 		space.style.opacity = 1;
 		space.style.visibility = "visible";	
 		space.style.cursor = "not-allowed";	
@@ -694,6 +767,7 @@ function spaceUpdate(space) {
 		
 		if(allX.length > 0) {
 			
+			//Sets all O to visible for next turn.
 			for(var i=0; i<allX.length; i++) {
 				if(allO[i].style.opacity != 1) {
 					allX[i].style.visibility = "visible";
@@ -764,6 +838,7 @@ function spaceUpdate(space) {
 		
 }
 
+//Resets the gameboard for a new game.
 function resetGame() {
 	
 	newGameUpdate();
@@ -790,6 +865,7 @@ function resetGame() {
 	turn = 1;
 	botGameEnded = false;
 	
+	//Resets scores back to 0 if either are greater than 99.
 	if (xScore >= 99 || oScore >= 99) {
 		xScore = 0;
 		oScore = 0;
@@ -828,6 +904,7 @@ function resetGame() {
 	
 }
 
+//Checks all win combos and tie for both X and O.
 function checkVictory() {
 	if (checkWinOpacity(allX, 0, 1, 2) || checkWinOpacity(allX, 3, 4, 5) || checkWinOpacity(allX, 6, 7, 8)) {
 		xWins();
@@ -871,6 +948,7 @@ function checkVictory() {
 	
 }
 
+//Checks if for the player array based in, the three spots are all filled.
 function checkWinOpacity(array, i1, i2, i3) {
 	
 		if (array[i1].style.opacity == 1 && array[i2].style.opacity == 1 && array[i3].style.opacity == 1) {
@@ -881,6 +959,7 @@ function checkWinOpacity(array, i1, i2, i3) {
 		}
 }
 
+//Checks if a player can win by choosing one of the three input spots.
 function checkWinningMoveOpacity(winArray, oppArray, i1, i2, i3) {
 	
 		if (winArray[i1].style.opacity == 0 && winArray[i2].style.opacity == 1 && winArray[i3].style.opacity == 1 && oppArray[i1].style.opacity == 0) {
@@ -897,6 +976,7 @@ function checkWinningMoveOpacity(winArray, oppArray, i1, i2, i3) {
 		}
 }
 
+//Checks if a player has a winning combo (1 spot taken, two available) for the three input spots.
 function checkWinLineOpacity(winArray, oppArray, i1, i2, i3) {
 	
 	var possibleWinLine = '';
@@ -919,6 +999,7 @@ function checkWinLineOpacity(winArray, oppArray, i1, i2, i3) {
 
 }
 
+//Increments xScore, updates for X win, and disables the gameboard.
 function xWins() {
 	xScore++;
 	xScoreView.textContent = xScore;
@@ -931,10 +1012,11 @@ function xWins() {
 	}
 }
 
+//Increments oScore, updates for X win, and disables the gameboard.
 function oWins() {
 	oScore++;
 	oScoreView.textContent = oScore;
-	winUpdate("O")
+	winUpdate("O");
 	disableXOnClick();
 	disableOOnClick();
 	
@@ -943,6 +1025,7 @@ function oWins() {
 	}
 }
 
+//Resets scoreboard to zeroes.
 function resetScores() {
 	
 	resetScoreUpdate();
@@ -952,18 +1035,17 @@ function resetScores() {
 	oScoreView.textContent = 0;
 }
 
-/* Functions related to Bot text updates */
+/* --------- Functions related to Bot text updates --------- */
 
 function ranNumGen(size) {
 	
 	var ranNumber = Math.floor(Math.random() * size);
 	
-
-	
 	lastRanNum = ranNumber;
 	return ranNumber;
 }
 
+//Updates botText based on the winner.
 function winUpdate(winner) {
 	
 	var combinedScore = xScore + oScore;
@@ -1020,6 +1102,7 @@ function winUpdate(winner) {
 
 }
 
+//Updates botText in the event of a tie.
 function tieUpdate() {
 	
 	if (humanGame() == true) {
@@ -1050,6 +1133,7 @@ function tieUpdate() {
 	}
 }
 
+//Updates botText when a new game occurs.
 function newGameUpdate() {
 	
 	if (humanGame() == true) {
@@ -1088,6 +1172,7 @@ function newGameUpdate() {
 	
 }
 
+//Updates botText when scores are reset.
 function resetScoreUpdate() {
 	
 	if (humanGame() == true) {
@@ -1132,6 +1217,9 @@ function resetScoreUpdate() {
 	
 }
 
+/* Called when user selects new option for players. 
+ * Resets current game, scores, and calls a bot game if xBot is selected.
+ */
 function switchModeUpdate() {
 	
 	resetGame();
