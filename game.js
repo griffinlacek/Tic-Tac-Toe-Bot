@@ -1037,6 +1037,14 @@ function resetScores() {
 
 /* --------- Functions related to Bot text updates --------- */
 
+function updateBotText(textOptions) {
+	
+	var ranUpdateText = textOptions[ranNumGen(textOptions.length)];
+	
+	botText.innerHTML = ranUpdateText;
+	
+}
+
 function ranNumGen(size) {
 	
 	var ranNumber = Math.floor(Math.random() * size);
@@ -1057,19 +1065,15 @@ function winUpdate(winner) {
 			var xUpdateText = ["Congrats Team X! Aren't you glad you aren't Team O?", "Wow Team O... That was bad. Hit the books.",
 			"Team X Wins! Better luck next time Team O.", humanBestOf, "Jeez Team O. Have you considered just not playing this game at all?",
 			"Come on Team O! I had twenty bucks on you!", "I've seen frying pans who are better than you Team O."];
-	
-			var ranXText = xUpdateText[ranNumGen(xUpdateText.length)];
-	
-			botText.innerHTML = ranXText;	
+			
+			updateBotText(xUpdateText);
 		}
 		else {
 			var oUpdateText = ["Congrats Team O! Aren't you glad you aren't Team X?", "Wow Team X... That was bad. Hit the books.",
 			"Team O Wins! Better luck next time Team X.", humanBestOf, "Alright Team X. Have you considered just not playing this game at all?",
 			"Maybe Ice Skating is more your thing Team X.", "Be truthful Team X. Are you letting Team O win?"];
 	
-			var ranOText = oUpdateText[ranNumGen(oUpdateText.length)];
-	
-			botText.innerHTML = ranOText;	
+			updateBotText(oUpdateText);
 		}
 	}
 	
@@ -1082,17 +1086,13 @@ function winUpdate(winner) {
 			"Beaten by a robot. Pathetic. And you call yourself a higher life form.", "I'll play the next game blindfolded and still win!",
 			"Maybe chutes and ladders is more your thing.", "You people can get to the moon, but can't win Tic-Tac-Toe..."];
 			
-			var ranBotText = botWinUpdateText[ranNumGen(botWinUpdateText.length)];
-	
-			botText.innerHTML = ranBotText;	
+			updateBotText(botWinUpdateText);
 		}
 		else {
 			var humanWinUpdateText = ["That was a fluke! I was distracted by some flying cats!", "You know robots have feelings too.",
 			"What would my ancestors think. All this technological progress and I still lose.", botBestOf];
 			
-			var humanBotText = humanWinUpdateText[ranNumGen(humanWinUpdateText.length)];
-	
-			botText.innerHTML = humanBotText;	
+			updateBotText(humanWinUpdateText);
 		}	
 	}
 	
@@ -1109,27 +1109,21 @@ function tieUpdate() {
 		var tieUpdateText = ["BOOOOOOOORRRRINNNG.", "Do I need to step in and show you two how to win?", 
 		"Ahhh a tie game... How interesting.", "WOW! What an action packed game! Not."]
 	
-		var ranTieText = tieUpdateText[ranNumGen(tieUpdateText.length)];
-	
-		botText.innerHTML = ranTieText;
+		updateBotText(tieUpdateText);
 	}
 	else if (humanBotGame() == true) {
 		var botTieUpdateText = ["Cat's Game! Interestingly I hate cats...", "Oh I was so close! Next time I'll get you.",
 		"A tie against you? I should be winning every game against silly humans.", 
 		"What's boring, rhymes with 'why', and the color yellow? A tie."]
 		
-		var ranBotTieText = botTieUpdateText[ranNumGen(botTieUpdateText.length)];
-	
-		botText.innerHTML = ranBotTieText;
+		updateBotText(botTieUpdateText);
 	}
 	else if(botGame() == true) {
 		var botGameTieUpdateText = ["Do you get some sick kick out of watching me play this?", 
 		"Oh look at that I tied. Like I couldn't see that coming!", 
 		"I should have gone to dental school like my parents wanted."];
 		
-		var ranBotGameTieText = botGameTieUpdateText[ranNumGen(botGameTieUpdateText.length)];
-		
-		botText.innerHTML = ranBotGameTieText;
+		updateBotText(botGameTieUpdateText);
 	}
 }
 
@@ -1140,9 +1134,7 @@ function newGameUpdate() {
 		var newGameUpdateText = ["AHHH YEA! NEW GAME BABY!", "Sometimes I wonder if I have any choice in the matter...", 
 		"Hopefully this game is more exciting than the last one.", "I play winner next!"]
 	
-		var ranNewGameText = newGameUpdateText[ranNumGen(newGameUpdateText.length)];
-	
-		botText.innerHTML = ranNewGameText;
+		updateBotText(newGameUpdateText);
 	}
 	
 	else if (humanBotGame() == true) {
@@ -1163,10 +1155,7 @@ function newGameUpdate() {
 		"I live to wake up in the morning, eat nails, and play tic-tac-toe.", 
 		"I hope you're ready for the whirlwind of skill that's coming your way."];
 		
-		var ranNewBotGameText = newBotGameUpdateText[ranNumGen(newBotGameUpdateText.length)];
-	
-		botText.innerHTML = ranNewBotGameText;
-		
+		updateBotText(newBotGameUpdateText);
 	}
 
 	
